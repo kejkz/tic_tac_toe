@@ -1,5 +1,7 @@
 version: '3.8'
 
+networks:
+  backend:
 services:
   web:
     build: .  # Build the service's image from the current directory
@@ -8,13 +10,16 @@ services:
       - "3000:3000"  # Expose ports for accessing the application
     volumes:
       - .:/app  # Mount the current directory inside the container
+    working_dir: /app
     depends_on:
       - db  # Specify dependency on the database service
+      - redis
     environment:
       DATABASE_URL: postgres://postgres:postgres@db:5432/tic_tac_toe  # Database connection parameters
       RAILS_MASTER_KEY: $RAILS_MASTER_KEY
       RAILS_ENV: $RAILS_ENV
-
+    networks:
+      - backend
   # Service for the PostgreSQL database
   db:
     image: postgres:13  # Use the official PostgreSQL version 13 image
@@ -25,7 +30,14 @@ services:
     environment:
       POSTGRES_USER: postgres  # Set the username for database access
       POSTGRES_PASSWORD: postgres  # Set the password for database access
-
+    networks:
+      - backend
+  redis:
+    image: redis:7-alpine
+    ports:
+      - 6379
+    networks:
+      - backend
 # Define a volume for storing PostgreSQL data
 volumes:
   postgres_data:
