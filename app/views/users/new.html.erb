@@ -1,5 +1,6 @@
 <h1>Tic Tac Toe</h1>
 <h2>Please enter your name</h2>
-<%= form_with url: users_path, method: :post do |form| %>
+<%= form_with model: @new_user, url: users_path, method: :post do |form| %>
   <%= form.text_field :name %>
+  <%= form.submit 'Create | Join Game' %>
 <% end %>
