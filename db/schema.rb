@@ -16,8 +16,14 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_29_053429) do
   enable_extension "plpgsql"
 
   create_table "games", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.integer "state", default: 0
+    t.bigint "x_user_id"
+    t.bigint "o_user_id"
+    t.string "current_state", default: [], array: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["o_user_id"], name: "index_games_on_o_user_id"
+    t.index ["x_user_id"], name: "index_games_on_x_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -26,4 +32,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_29_053429) do
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "games", "users", column: "o_user_id"
+  add_foreign_key "games", "users", column: "x_user_id"
 end
