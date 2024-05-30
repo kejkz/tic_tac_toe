@@ -15,5 +15,7 @@ consumer.subscriptions.create("GameChannel", {
 
       this.perform('start')
     }
+
+
   }
 });

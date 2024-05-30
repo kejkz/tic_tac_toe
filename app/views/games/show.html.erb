@@ -1,6 +1,7 @@
 <h2>Hi <%= current_user.name %></h2>
 <% x_user = @game.x_user %>
 <% o_user = @game.o_user %>
+<% %>
 
 <% if x_user == current_user %>
   <div> You: X </div>
@@ -14,7 +15,24 @@
   <div>Opponent: Y (<%= x_user.name %>)</div>
 <% end %>
 
+<div class="grid">
+  <div>
+    <% @game.current_state[0..2].each.with_index do |field, index| %>
+      <%= button_to field, game_path(@game), method: :put, params: index %>
+    <% end %>
+  </div>
+  <div>
+    <% @game.current_state[3..5].each.with_index(3) do |field, index| %>
+      <%= button_to field, game_path(@game), method: :put, params: index %>
+    <% end %>
+  </div>
+  <div>
+    <% @game.current_state[6..8].each.with_index(6) do |field, index| %>
+      <%= button_to field, game_path(@game), params: index, method: :put %>
+    <% end %>
+  </div>
+</div>
 
-<% @game.current_state.each_with_index do |field, index| %>
-  <div><%= button_to field, action: :update %></div>
+<% if @game_logic.current_player == current_user %>
+<div>It's your turn</div>
 <% end %>

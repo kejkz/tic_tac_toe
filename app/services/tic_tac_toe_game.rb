@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
-class TicTacToe
+class TicTacToeGame
+  class NotAllowedToPlayError < StandardError; end
+
   WIN_COMBINATIONS = [
     [0,1,2],
     [3,4,5],
@@ -17,9 +19,18 @@ class TicTacToe
     prepare_game
   end
 
-  def move(index, character = "X")
-    character = board[index]
-    board
+  def turn(user, index)
+    if valid_move?(index)
+      move(index)
+      @game.save!
+    else
+      false
+    end
+  end
+
+  def move(index, user)
+    char = char_for(user)
+    board[index] = char
   end
 
   def turn_count
@@ -32,6 +43,16 @@ class TicTacToe
     end
 
     counter
+  end
+
+  def char_for(user)
+    if @game.x_user == user
+      'X'
+    elsif @game.o_user == user
+      'O'
+    else
+      raise NotAllowedToPlayError, "Not possible to play #{@game.id} with user #{user.id}"
+    end
   end
 
   def current_player
@@ -52,12 +73,15 @@ class TicTacToe
       position_1 = board[index_0]
       position_2 = board[index_1]
       position_3 = board[index_2]
+
       if position_1 == "X" && position_2 == "X" && position_3 == "X" || position_1 == "O" && position_2 == "O" && position_3 == "O"
         return win_combo
+      else
+        next
       end
     end
-  else
-    false
+
+    return false
   end
 
 
@@ -91,8 +115,7 @@ class TicTacToe
     end
   end
 
-  # Draw when board is full and cannot define the win combo
-  def draw?(board)
+  def draw?
     if full?(board) == true && won?(board) == false
       true
     else
@@ -100,21 +123,19 @@ class TicTacToe
     end
   end
 
-  # Over happens when X or O won, or every position is occupied, or draw, or X or Y won but not all the positions are occupied
-  def over?(board)
-    if won?(board) || full?(board) || draw?(board)
+  def over?
+    if won? || full? || draw?
       true
     else
       nil
     end
   end
 
-  # Check who is the winner, X or O
-  def winner(board)
+  def winner
     checkwinner = []
-    checkwinner = won?(board)
+    checkwinner = won?
 
-    if won?(board) == false
+    if won? == false
       nil
     else
       if board[checkwinner[0]] == "X"
@@ -122,12 +143,15 @@ class TicTacToe
       else
         return "O"
       end
+    end
   end
 
   private
 
   def prepare_game
-    @game.current_state = ['', '', '', '', '', '', '', '', '']
+    if @game.current_state.blank?
+      @game.current_state = ['', '', '', '', '', '', '', '', '']
+    end
   end
 
   def board

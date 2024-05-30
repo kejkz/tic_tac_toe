@@ -11,5 +11,11 @@ class GamesController < ApplicationController
     redirect_to new_game_path, 'Access forbidden' unless current_user == @game.x_user || current_user == @game.o_user
 
     current_user.playing!
+
+    @game_logic = ::TicTacToeGame.new(@game)
+  end
+
+  def update
+    Rails.logger.info(params)
   end
 end
