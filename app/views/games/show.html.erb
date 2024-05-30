@@ -1,0 +1,20 @@
+<h2>Hi <%= current_user.name %></h2>
+<% x_user = @game.x_user %>
+<% o_user = @game.o_user %>
+
+<% if x_user == current_user %>
+  <div> You: X </div>
+  <div>
+    Opponent (O): (<%= o_user.name %>)
+  </div>
+<% end %>
+
+<% if o_user == current_user %>
+  <div>You: O </div>
+  <div>Opponent: Y (<%= x_user.name %>)</div>
+<% end %>
+
+
+<% @game.current_state.each_with_index do |field, index| %>
+  <div><%= button_to field, action: :update %></div>
+<% end %>
