@@ -29,17 +29,17 @@
     <div>
       <div class="grid">
         <% @game.current_state[0..2].each.with_index do |field, index| %>
-          <span><%= button_to field, game_path(@game), params: { position: index }, method: :put, disabled: (!current_player_turn || field.present?) && game_over %></span>
+          <%= button_to field, game_path(@game), params: { position: index }, method: :put, disabled: game_over ? true : !current_player_turn || field.present? %>
         <% end %>
       </div>
       <div class="grid">
         <% @game.current_state[3..5].each.with_index(3) do |field, index| %>
-          <%= button_to field, game_path(@game), params: { position: index }, method: :put, disabled: (!current_player_turn || field.present?) && game_over %>
+          <%= button_to field, game_path(@game), params: { position: index }, method: :put, disabled: game_over ? true : !current_player_turn || field.present?  %>
         <% end %>
       </div>
       <div class="grid">
         <% @game.current_state[6..8].each.with_index(6) do |field, index| %>
-          <%= button_to field, game_path(@game), params: { position: index }, method: :put, disabled: (!current_player_turn || field.present?) && game_over %>
+          <%= button_to field, game_path(@game), params: { position: index }, method: :put, disabled: game_over ? true : !current_player_turn || field.present? %>
         <% end %>
       </div>
     </div>
