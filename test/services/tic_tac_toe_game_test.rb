@@ -38,4 +38,15 @@ class TicTacToeTest < ActiveSupport::TestCase
 
     assert game_logic.winner == 'O'
   end
+
+  def test_current_player
+    x_user = User.create!(name: 'josh11')
+    o_user = User.create!(name: 'mickey20')
+    game = Game.new(x_user: x_user, o_user: o_user)
+    game_logic = TicTacToeGame.new(game)
+
+    game.current_state = ['X', '', '', '', '', '', '', '']
+
+    assert game_logic.current_player == o_user
+  end
 end

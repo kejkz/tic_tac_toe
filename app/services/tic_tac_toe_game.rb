@@ -21,8 +21,7 @@ class TicTacToeGame
 
   def turn(user, index)
     if valid_move?(index)
-      move(index)
-      @game.save!
+      move(index, user)
     else
       false
     end
@@ -59,9 +58,9 @@ class TicTacToeGame
     current_turn_count = turn_count
 
     if current_turn_count % 2 == 0
-      @game.x_user
+      return @game.x_user
     else
-      @game.y_user
+      return @game.o_user
     end
   end
 
@@ -139,9 +138,9 @@ class TicTacToeGame
       nil
     else
       if board[checkwinner[0]] == "X"
-        return "X"
+        return @game.x_user
       else
-        return "O"
+        return @game.o_user
       end
     end
   end

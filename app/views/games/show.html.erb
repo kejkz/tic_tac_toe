@@ -1,38 +1,48 @@
 <h2>Hi <%= current_user.name %></h2>
 <% x_user = @game.x_user %>
 <% o_user = @game.o_user %>
-<% %>
-
-<% if x_user == current_user %>
-  <div> You: X </div>
-  <div>
-    Opponent (O): (<%= o_user.name %>)
-  </div>
+<% current_player_turn = @game_logic.current_player == current_user %>
+<% game_over = @game_logic.over? %>
+<% if game_over %>
+  <h3>This game is over</h3>
 <% end %>
 
-<% if o_user == current_user %>
-  <div>You: O </div>
-  <div>Opponent: Y (<%= x_user.name %>)</div>
-<% end %>
+<div>
+  Player X: <%= x_user.name %>
+  <% if x_user == current_user %>
+    <span>You</span>
+  <% end %>
+</div>
+
+<div>
+  Player O: <%= o_user.name %>
+  <% if o_user == current_user %>
+    <span>You</span>
+  <% end %>
+</div>
 
 <div class="grid">
   <div>
     <% @game.current_state[0..2].each.with_index do |field, index| %>
-      <%= button_to field, game_path(@game), method: :put, params: index %>
+      <span><%= button_to field, game_path(@game), params: { position: index }, method: :put, disabled: (!current_player_turn || field.present?) && game_over %></span>
     <% end %>
   </div>
   <div>
     <% @game.current_state[3..5].each.with_index(3) do |field, index| %>
-      <%= button_to field, game_path(@game), method: :put, params: index %>
+      <%= button_to field, game_path(@game), params: { position: index }, method: :put, disabled: (!current_player_turn || field.present?) && game_over %>
     <% end %>
   </div>
   <div>
     <% @game.current_state[6..8].each.with_index(6) do |field, index| %>
-      <%= button_to field, game_path(@game), params: index, method: :put %>
+      <%= button_to field, game_path(@game), params: { position: index }, method: :put, disabled: (!current_player_turn || field.present?) && game_over %>
     <% end %>
   </div>
 </div>
 
-<% if @game_logic.current_player == current_user %>
+<% unless @game_logic.over? %>
+<% if current_player_turn %>
 <div>It's your turn</div>
+<% else %>
+<div>Please wait for your turn</div>
+<% end %>
 <% end %>
