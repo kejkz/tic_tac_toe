@@ -3,7 +3,7 @@
 <% current_player_turn = @game_logic.current_player == current_user %>
 <% game_over = @game_logic.over? %>
 <body>
-<div class="container">
+<div class="container" data-controller="game">
   <header>
     <h2>Hi <%= current_user.name %></h2>
   </header>

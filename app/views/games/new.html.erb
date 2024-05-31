@@ -1,5 +1,5 @@
 <h2>Hi <%= current_user.name %></h2>
 
-<div>Please wait for another player to start playing the game</div>
+<div data-controller="available">Please wait for another player to start playing the game</div>
 
 <%= button_to 'Sign out', users_path, method: :delete, confirm: 'Are you sure?' %>

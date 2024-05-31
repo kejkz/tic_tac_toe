@@ -2,7 +2,9 @@ class GamesController < ApplicationController
   def new
     redirect_to new_users_path unless current_user.present?
 
-    @game = Game.find_or_create_by(x_user: current_user)
+    @game = Game.find_or_create_by(x_user: current_user, state: :fresh)
+
+    Rails.logger.debug(@game)
   end
 
   def show
@@ -26,6 +28,8 @@ class GamesController < ApplicationController
     render :show, status: :unprocessable_entity, notice: 'Cannot play' and return unless @game_logic.current_player == current_user
     render :show, status: :unprocessable_entity, notice: 'This game is complete' and return if @game.complete?
 
+    another_user = game.x_user == current_user ? game.o_user : game.x_user
+
     if @game_logic.turn(current_user, update_params[:position].to_i)
       game.save!
       if @game_logic.over?
@@ -33,6 +37,7 @@ class GamesController < ApplicationController
         flash.now[:message] = "Draw Game!" if @game_logic.draw?
         game.complete!
       end
+      GameChannel.broadcast_to(game, notice: 'Move made', game: game)
     else
       flash.now[:error] = 'There was a problem making a move'
     end

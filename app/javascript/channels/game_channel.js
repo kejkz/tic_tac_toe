@@ -10,7 +10,6 @@ consumer.subscriptions.create("GameChannel", {
   },
 
   received(gameData) {
-    console.log(gameData)
     if (gameData.state === 'ready') {
       window.location.href = `/games/${gameData.id}`
 
