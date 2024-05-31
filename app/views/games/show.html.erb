@@ -14,6 +14,7 @@
     <main>
       <% if game_over %>
         <h3>This game is over</h3>
+        <div>Start new? <%= button_to 'Start', new_game_path, method: :get, data: { turbo_frame: :_top}%></div>
       <% end %>
 
       <div>
