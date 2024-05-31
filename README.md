@@ -15,6 +15,14 @@ docker-compose up
 docker-compose run web bin/rake db:create
 ```
 
+Setup docker environment by adding the `.env` file with:
+
+```
+RAILS_MASTER_KEY=`secret`
+RAILS_ENV=development
+REDIS_URL=redis://redis:6379/1
+```
+
 ## Running
 
 Navigate to `localhost:3000/users/new` to sign in for the game.
