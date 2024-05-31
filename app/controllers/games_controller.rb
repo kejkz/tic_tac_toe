@@ -1,11 +1,12 @@
 class GamesController < ApplicationController
   def new
     redirect_to new_users_path unless current_user.present?
+
+    @game = Game.find_or_create_by(x_user: current_user)
   end
 
   def show
-    redirect_to new_game_path, notice: 'Cannot find a provided game' if game.blank?
-    redirect_to new_game_path, notice: 'Game is complete' if game.state == 'complete'
+    redirect_to new_game_path, notice: 'Cannot find a provided game' unless game.present?
     redirect_to new_game_path, notice: 'Access forbidden' unless current_user == game.x_user || current_user == game.o_user
 
     current_user.playing!
@@ -14,7 +15,8 @@ class GamesController < ApplicationController
     game.save!
 
     if game.complete?
-      flash.now[:notice] = "The winner is #{@game_logic.winner.name}"
+      flash.now[:notice] = "The winner is #{@game_logic.winner.name}" if @game_logic.won?
+      flash.now[:notice] = "Draw game" if @game_logic.draw?
     end
   end
 

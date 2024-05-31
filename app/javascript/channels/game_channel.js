@@ -10,12 +10,15 @@ consumer.subscriptions.create("GameChannel", {
   },
 
   received(gameData) {
+    console.log(gameData)
     if (gameData.state === 'ready') {
       window.location.href = `/games/${gameData.id}`
 
       this.perform('start')
     }
 
-
+    if (gameData.state === 'in_progress') {
+      location.reload()
+    }
   }
 });
