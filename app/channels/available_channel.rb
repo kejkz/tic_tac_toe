@@ -19,4 +19,8 @@ class AvailableChannel < ApplicationCable::Channel
   def playing
     current_user.playing!
   end
+
+  periodically every: 2.seconds do
+    Rails.logger.info("Available users: #{User.available.pluck(:name)}")
+  end
 end
