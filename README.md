@@ -1,24 +1,26 @@
-# README
+# Tic Tac Toe assignment
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+A Rails based game of tic tac toe, made for any number of players
 
-Things you may want to cover:
+## Installation
 
-* Ruby version
+Requirements: Docker and Docker compose
 
-* System dependencies
+Find more details about the installation on the [official docker guide](https://docs.docker.com/compose/install/)
 
-* Configuration
+After obraining the archive, extract to any directory, and run
 
-* Database creation
+```
+docker-compose up
+docker-compose run web bin/rake db:create
+```
 
-* Database initialization
+## Running
 
-* How to run the test suite
+Navigate to `localhost:3000/users/new` to sign in for the game.
 
-* Services (job queues, cache servers, search engines, etc.)
+## Known issues
 
-* Deployment instructions
-
-* ...
+- Logic of the new games creation and joining is still flaky. There is a chance that both active users will appear in different games during the execution
+- Page reloads during the games execution, which is really bad user experience, but works
+- Closing the game window still doesn't close the game
