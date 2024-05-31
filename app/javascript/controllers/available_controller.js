@@ -43,15 +43,15 @@ export default class extends Controller {
   }
 
   away() {
-    this.perform("away")
+    this.channel.perform("away")
   }
 
   available() {
-    this.perform("available", { available_for: 'game' })
+    this.channel.perform("available", { available_for: 'game' })
   }
 
   playing() {
-    this.perform('playing', { game: 'game' })
+    this.channel.perform('playing', { game: 'game' })
   }
 
   install() {
