@@ -9,53 +9,53 @@
   <header>
     <h2>Hi <%= current_user.name %></h2>
   </header>
-  <main>
-    <% if game_over %>
-      <h3>This game is over</h3>
-    <% end %>
-
-    <div>
-      Player X: <%= x_user.name %>
-      <% if x_user == current_user %>
-        <span>You</span>
+  <%= turbo_frame_tag :current_game, data: { game_target: :game } do %>
+    <%= render partial: 'layouts/flash' %>
+    <main>
+      <% if game_over %>
+        <h3>This game is over</h3>
       <% end %>
-    </div>
 
-    <div>
-      Player O: <%= o_user.name %>
-      <% if o_user == current_user %>
-        <span>You</span>
-      <% end %>
-    </div>
-
-    <%= turbo_frame_tag :current_game, data: { game_target: :game } do %>
       <div>
-        <div class="grid">
-          <% @game.current_state[0..2].each.with_index do |field, index| %>
-            <%= button_to field, game_path(@game), params: { position: index }, method: :put, disabled: game_over ? true : !current_player_turn || field.present? %>
-          <% end %>
-        </div>
-        <div class="grid">
-          <% @game.current_state[3..5].each.with_index(3) do |field, index| %>
-            <%= button_to field, game_path(@game), params: { position: index }, method: :put, disabled: game_over ? true : !current_player_turn || field.present?  %>
-          <% end %>
-        </div>
-        <div class="grid">
-          <% @game.current_state[6..8].each.with_index(6) do |field, index| %>
-            <%= button_to field, game_path(@game), params: { position: index }, method: :put, disabled: game_over ? true : !current_player_turn || field.present? %>
-          <% end %>
-        </div>
+        Player X: <%= x_user.name %>
+        <% if x_user == current_user %>
+          <span>You</span>
+        <% end %>
       </div>
 
-      <% unless game_over %>
-        <% if current_player_turn %>
-          <div>It's your turn</div>
-        <% else %>
-          <div>Please wait for your turn</div>
+      <div>
+        Player O: <%= o_user.name %>
+        <% if o_user == current_user %>
+          <span>You</span>
         <% end %>
-      <% end %>
-    <% end %>
+      </div>
+
+        <div>
+          <div class="grid">
+            <% @game.current_state[0..2].each.with_index do |field, index| %>
+              <%= button_to field, game_path(@game), params: { position: index }, method: :put, disabled: game_over ? true : !current_player_turn || field.present? %>
+            <% end %>
+          </div>
+          <div class="grid">
+            <% @game.current_state[3..5].each.with_index(3) do |field, index| %>
+              <%= button_to field, game_path(@game), params: { position: index }, method: :put, disabled: game_over ? true : !current_player_turn || field.present?  %>
+            <% end %>
+          </div>
+          <div class="grid">
+            <% @game.current_state[6..8].each.with_index(6) do |field, index| %>
+              <%= button_to field, game_path(@game), params: { position: index }, method: :put, disabled: game_over ? true : !current_player_turn || field.present? %>
+            <% end %>
+          </div>
+        </div>
+        <% unless game_over %>
+          <% if current_player_turn %>
+            <div>It's your turn</div>
+          <% else %>
+            <div>Please wait for your turn</div>
+          <% end %>
+        <% end %>
+      </main>
     </main>
-  </main>
+  <% end %>
 </div>
 </body>
