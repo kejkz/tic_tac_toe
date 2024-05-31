@@ -2,6 +2,8 @@
 <% o_user = @game.o_user %>
 <% current_player_turn = @game_logic.current_player == current_user %>
 <% game_over = @game_logic.over? %>
+<% current_user_char = @game_logic.char_for(current_user) %>
+<% game_over = @game_logic.over? %>
 <body>
 <div class="container" data-controller="game">
   <header>
@@ -26,7 +28,7 @@
       <% end %>
     </div>
 
-    <%= turbo_frame_tag :current_game %>
+    <%= turbo_frame_tag :current_game, data: { game_target: :game } do %>
       <div>
         <div class="grid">
           <% @game.current_state[0..2].each.with_index do |field, index| %>
@@ -45,13 +47,14 @@
         </div>
       </div>
 
-      <% unless @game_logic.over? %>
-      <% if current_player_turn %>
-      <div>It's your turn</div>
-      <% else %>
-      <div>Please wait for your turn</div>
+      <% unless game_over %>
+        <% if current_player_turn %>
+          <div>It's your turn</div>
+        <% else %>
+          <div>Please wait for your turn</div>
+        <% end %>
       <% end %>
-      <% end %>
+    <% end %>
     </main>
   </main>
 </div>

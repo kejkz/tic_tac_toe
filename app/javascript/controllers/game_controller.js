@@ -2,8 +2,11 @@ import { Controller } from "@hotwired/stimulus"
 import consumer from "../channels/consumer"
 
 export default class extends Controller {
+  static targets = ['game']
+
   connect() {
     console.log('Connected')
+    console.log(this.gameTarget)
     this.channel = consumer.subscriptions.create({ channel: "GameChannel", room: "Game"}, {
       connected: this.connected.bind(this),
       disconnected: this.disconnected.bind(this),
@@ -22,6 +25,10 @@ export default class extends Controller {
 
   received(gameData) {
     console.log(gameData)
+
+    this.gameTarget.src = `/games/${gameData.game.id}`
+
+    console.log(this.gameTarget)
   }
 
   rejected() {
